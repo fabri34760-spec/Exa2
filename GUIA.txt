@@ -1,0 +1,1644 @@
+==============================================================================
+GUIA DEL MOLDE EXA
+Dónde está cada cosa y cómo cambiarla. Proyecto: C:\Users\Fabricio\Videos\Exa
+Busca los títulos con Ctrl+F (están en MAYÚSCULAS).
+==============================================================================
+
+INDICE
+  RECETAS: AGREGAR ALGO NUEVO
+  1. MAPA RÁPIDO
+  2. ÁTOMOS
+  3. MOLÉCULAS
+  4. ORGANISMOS
+  5. PLANTILLA
+  6. PÁGINA (SRC/APP/INDEX.TSX)
+  7. DATOS (SRC/DATOS/EJEMPLO.TS)
+  8. ESTILOS (SRC/ESTILOS/ESTILOS.TS)
+  9. CREAR UN COMPONENTE NUEVO
+  10. CÓMO REPLICAR UNA CAPTURA EN EL EXAMEN
+  11. PROBLEMAS COMUNES
+
+==============================================================================
+RECETAS: AGREGAR ALGO NUEVO
+==============================================================================
+
+Cada receta sigue los mismos pasos: archivo, qué buscar, qué pegar, dónde queda, import, cómo personalizarlo y cómo se verá.
+
+  - Los números de línea son los del archivo original. Si ya pegaste otra receta, los números se mueven, pero el texto de "BUSCA CON CTRL+F" sigue sirviendo.
+  - "DÓNDE QUEDA" es solo para ver la posición. Copia siempre desde "PEGA ESTE CÓDIGO". Las marcas // <<< NUEVO no se copian: dentro del JSX romperían la pantalla.
+  - Si dos recetas agregan algo al mismo import, deja todos los nombres dentro de las mismas llaves, separados por coma. Ej: import { Buscador, CampoTexto, ItemUsuario, TarjetaProducto } from '@/componentes/moleculas';
+  - Si usas dos recetas con useState, cada estado necesita un nombre distinto (ya vienen con nombres distintos).
+  - Después de pegar: guarda con Ctrl+S y, si el celular no cambia, presiona r en la terminal.
+
+RECETAS EN ESTA SECCIÓN:
+  - BOTÓN NUEVO AL LADO DE LOS OTROS BOTONES
+  - BOTÓN NUEVO SOLO, A LO ANCHO, EN OTRA PARTE
+  - TARJETA DE PRODUCTO NUEVA (EN LA LISTA, CON DATOS)
+  - TARJETA DE PRODUCTO SUELTA (FUERA DE LA LISTA)
+  - USUARIO NUEVO (EN LA LISTA, CON DATOS)
+  - FILA DE USUARIO SUELTA (FUERA DE LA LISTA)
+  - TÍTULO NUEVO
+  - TEXTO NORMAL NUEVO
+  - IMAGEN NUEVA (DE INTERNET)
+  - IMAGEN NUEVA (DE LA CARPETA ASSETS)
+  - FOTO DE PERFIL NUEVA
+  - ETIQUETA NUEVA
+  - CAMPO DE TEXTO NUEVO (CON SU USESTATE)
+  - BUSCADOR NUEVO
+  - ICONO NUEVO EN EL ENCABEZADO
+  - OPCIÓN NUEVA EN EL MENÚ INFERIOR
+  - SECCIÓN NUEVA COMPLETA (TÍTULO + CONTENIDO) ENTRE DOS BLOQUES
+  - DOS ELEMENTOS UNO AL LADO DEL OTRO (FILA)
+  - CAMBIAR EL COLOR DE UN SOLO ELEMENTO SIN AFECTAR A LOS DEMÁS
+
+--- RECETA: BOTÓN NUEVO AL LADO DE LOS OTROS BOTONES ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Boton texto="Con borde"
+   Pega en una línea nueva justo debajo de esa línea (antes de </View>).
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+            <Boton texto="Nuevo" tipo="principal" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 127 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            {/* COLOR: estilos.ts -> BOTÓN CON BORDE */}
+            {/* ACCION: qué pasa al tocar (ahora no hace nada) */}
+            <Boton texto="Con borde" tipo="borde" alPresionar={() => {}} />
+            <Boton texto="Nuevo" tipo="principal" alPresionar={() => {}} />  // <<< NUEVO
+          </View>
+          {/* ===== FIN BLOQUE ===== */}
+        </PlantillaPantalla>
+  ... FIN ...
+5. IMPORT: No hace falta: Boton ya está en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Nuevo" en texto="Nuevo".
+  - Color solo de este elemento -> agrega colorFondo="#E53935" (también colorTexto="#FFFFFF" y, en tipo="borde", colorBorde="#E53935").
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> BOTÓN PRINCIPAL (o BOTÓN SECUNDARIO / BOTÓN CON BORDE si cambias tipo).
+  - Icono -> agrega icono="estrella". Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> tipo="principal" | "secundario" | "borde"; anchoCompleto para ocupar todo el ancho; alto y bordeRedondeado en el bloque del botón en estilos.ts.
+  - Acción al tocar -> alPresionar={() => {}}. Ej: alPresionar={() => setPestana('perfil')}.
+7. RESULTADO: Un cuarto botón morado "Nuevo" junto a "Con borde"; si no cabe, baja a la línea de abajo.
+
+--- RECETA: BOTÓN NUEVO SOLO, A LO ANCHO, EN OTRA PARTE ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <ListaUsuarios usuarios={usuarios} />
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <Boton texto="Nuevo" tipo="principal" icono="agregar" anchoCompleto alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 109 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: qué pasa al tocar una fila: agrega alPresionarUsuario={(usuario) => {}} */}
+          <ListaUsuarios usuarios={usuarios} />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <Boton texto="Nuevo" tipo="principal" icono="agregar" anchoCompleto alPresionar={() => {}} />  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: No hace falta: Boton y Espacio ya están en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Nuevo" en texto="Nuevo".
+  - Color solo de este elemento -> colorFondo="#43A047" y colorTexto="#FFFFFF".
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> BOTÓN PRINCIPAL.
+  - Icono -> icono="agregar"; bórralo para quitar el icono. Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> anchoCompleto lo estira a todo el ancho (bórralo para que sea del tamaño del texto); alto y bordeRedondeado en BOTÓN PRINCIPAL.
+  - Acción al tocar -> alPresionar={() => {}}.
+7. RESULTADO: Un botón morado de lado a lado con un "+" y el texto "Nuevo", debajo de la lista de usuarios.
+
+--- RECETA: TARJETA DE PRODUCTO NUEVA (EN LA LISTA, CON DATOS) ---
+1. ARCHIVO: src/datos/ejemplo.ts
+2. BUSCA CON CTRL+F: descripcion: 'Cámara compacta 24MP',
+   Baja hasta el "}," que cierra ese producto (2 líneas más abajo) y pega en una línea nueva debajo, antes de "];".
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+      {
+        id: '3',
+        titulo: 'Producto nuevo',
+        descripcion: 'Nuevo',
+        imagen: 'https://picsum.photos/id/20/400/300',
+        etiqueta: 'Nuevo',
+      },
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 26 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+        descripcion: 'Cámara compacta 24MP',
+        imagen: 'https://picsum.photos/id/250/400/300',
+      },
+      {  // <<< NUEVO
+        id: '3',  // <<< NUEVO
+        titulo: 'Producto nuevo',  // <<< NUEVO
+        descripcion: 'Nuevo',  // <<< NUEVO
+        imagen: 'https://picsum.photos/id/20/400/300',  // <<< NUEVO
+        etiqueta: 'Nuevo',  // <<< NUEVO
+      },  // <<< NUEVO
+    ];
+    (fin del archivo)
+  ... FIN ...
+5. IMPORT: No hace falta.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> titulo: 'Producto nuevo', descripcion: 'Nuevo' (aquí va el precio si hace falta, ej. '$199'), etiqueta: 'Nuevo' (borra esa línea si no quieres etiqueta).
+  - Color solo de este elemento -> agrega una línea colorFondo: '#FFF3E0', dentro del objeto (pinta solo esta tarjeta).
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TARJETA DE PRODUCTO.
+  - Icono -> la tarjeta no tiene icono.
+  - Tamaño o forma -> altoImagen y bordeRedondeado en TARJETA DE PRODUCTO. Para 1 tarjeta por fila: en index.tsx usa <ListaProductos productos={productosFiltrados} columnas={1} />.
+  - Acción al tocar -> en src/app/index.tsx: <ListaProductos productos={productosFiltrados} alPresionarProducto={(producto) => {}} />.
+7. RESULTADO: Una tercera tarjeta abajo a la izquierda, con foto, etiqueta naranja "Nuevo", título "Producto nuevo" y "Nuevo" en gris.
+
+--- RECETA: TARJETA DE PRODUCTO SUELTA (FUERA DE LA LISTA) ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <ListaProductos productos={productosFiltrados} />
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <View style={styles.fila}>
+            <TarjetaProducto
+              titulo="Producto nuevo"
+              descripcion="Nuevo"
+              imagen="https://picsum.photos/id/20/400/300"
+              etiqueta="Nuevo"
+              alPresionar={() => {}}
+            />
+          </View>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 95 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: qué pasa al tocar una tarjeta: agrega alPresionarProducto={(producto) => {}} */}
+          <ListaProductos productos={productosFiltrados} />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <View style={styles.fila}>  // <<< NUEVO
+            <TarjetaProducto  // <<< NUEVO
+              titulo="Producto nuevo"  // <<< NUEVO
+              descripcion="Nuevo"  // <<< NUEVO
+              imagen="https://picsum.photos/id/20/400/300"  // <<< NUEVO
+              etiqueta="Nuevo"  // <<< NUEVO
+              alPresionar={() => {}}  // <<< NUEVO
+            />  // <<< NUEVO
+          </View>  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: en src/app/index.tsx, línea 11, agrega TarjetaProducto dentro de las llaves.
+   Antes:
+  ... SOLO PARA VER (no copiar) ...
+    import { Buscador } from '@/componentes/moleculas';
+  ... FIN ...
+   Después (reemplaza la línea completa):
+  >>> CODIGO >>>
+    import { Buscador, TarjetaProducto } from '@/componentes/moleculas';
+  <<< FIN CODIGO <<<
+6. CÓMO PERSONALIZARLO:
+  - Texto -> titulo="Producto nuevo", descripcion="Nuevo", etiqueta="Nuevo".
+  - Color solo de este elemento -> colorFondo="#FFF3E0" (fondo) y colorTexto="#E65100" (título).
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TARJETA DE PRODUCTO.
+  - Icono -> la tarjeta no tiene icono.
+  - Tamaño o forma -> el <View style={styles.fila}> hace que ocupe todo el ancho. Para media pantalla, agrega <View style={styles.llenar} /> después de la tarjeta, dentro del View. Alto de la imagen: altoImagen en TARJETA DE PRODUCTO.
+  - Acción al tocar -> alPresionar={() => {}}.
+7. RESULTADO: Una tarjeta grande de lado a lado debajo de la grilla de productos, con foto, etiqueta "Nuevo" y título "Producto nuevo".
+
+--- RECETA: USUARIO NUEVO (EN LA LISTA, CON DATOS) ---
+1. ARCHIVO: src/datos/ejemplo.ts
+2. BUSCA CON CTRL+F: nombre: 'Carlos Ruiz'
+   Pega en una línea nueva justo debajo de esa línea, antes de "];".
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+      { id: '3', nombre: 'Usuario Nuevo', descripcion: 'Nuevo' },
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 9 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+    export const usuarios: Usuario[] = [
+      { id: '1', nombre: 'Ana Pérez', descripcion: 'Diseñadora', imagen: 'https://i.pravatar.cc/150?img=47' },
+      { id: '2', nombre: 'Carlos Ruiz', descripcion: 'Desarrollador' }, // sin imagen -> iniciales
+      { id: '3', nombre: 'Usuario Nuevo', descripcion: 'Nuevo' },  // <<< NUEVO
+    ];
+    
+    // Tarjetas de "Productos": titulo, descripcion (ej. precio), imagen, etiqueta (opcional)
+  ... FIN ...
+5. IMPORT: No hace falta.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> nombre: 'Usuario Nuevo' (también da las iniciales), descripcion: 'Nuevo'.
+  - Color solo de este elemento -> agrega colorFondo: '#E8F5E9' dentro del objeto: { id: '3', nombre: 'Usuario Nuevo', descripcion: 'Nuevo', colorFondo: '#E8F5E9' }.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> ITEM DE USUARIO (fila) y FOTO DE PERFIL (círculo).
+  - Icono -> la flecha de la derecha es fija (nombre="flecha" en src/componentes/moleculas/ItemUsuario.tsx). Foto en vez de iniciales: agrega imagen: 'https://i.pravatar.cc/150?img=12'.
+  - Tamaño o forma -> tamano en FOTO DE PERFIL; bordeRedondeado en ITEM DE USUARIO.
+  - Acción al tocar -> en src/app/index.tsx: <ListaUsuarios usuarios={usuarios} alPresionarUsuario={(usuario) => {}} />.
+7. RESULTADO: Una tercera fila con un círculo morado "UN", el nombre "Usuario Nuevo", "Nuevo" en gris y la flecha.
+
+--- RECETA: FILA DE USUARIO SUELTA (FUERA DE LA LISTA) ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <ListaUsuarios usuarios={usuarios} />
+   Pega en una línea nueva justo debajo de esa línea.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio tamano="chico" />
+          <ItemUsuario nombre="Usuario Nuevo" descripcion="Nuevo" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 108 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* COLOR: estilos.ts -> ITEM DE USUARIO y FOTO DE PERFIL */}
+          {/* ACCION: qué pasa al tocar una fila: agrega alPresionarUsuario={(usuario) => {}} */}
+          <ListaUsuarios usuarios={usuarios} />
+          <Espacio tamano="chico" />  // <<< NUEVO
+          <ItemUsuario nombre="Usuario Nuevo" descripcion="Nuevo" alPresionar={() => {}} />  // <<< NUEVO
+          {/* ===== FIN BLOQUE ===== */}
+    
+          <Espacio tamano="grande" />
+  ... FIN ...
+5. IMPORT: en src/app/index.tsx, línea 11, agrega ItemUsuario dentro de las llaves.
+   Antes:
+  ... SOLO PARA VER (no copiar) ...
+    import { Buscador } from '@/componentes/moleculas';
+  ... FIN ...
+   Después (reemplaza la línea completa):
+  >>> CODIGO >>>
+    import { Buscador, ItemUsuario } from '@/componentes/moleculas';
+  <<< FIN CODIGO <<<
+6. CÓMO PERSONALIZARLO:
+  - Texto -> nombre="Usuario Nuevo", descripcion="Nuevo".
+  - Color solo de este elemento -> colorFondo="#E8F5E9" (fondo) y colorTexto="#2E7D32" (nombre).
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> ITEM DE USUARIO y FOTO DE PERFIL.
+  - Icono -> la flecha es fija. Foto: agrega imagen="https://i.pravatar.cc/150?img=12".
+  - Tamaño o forma -> tamano en FOTO DE PERFIL; bordeRedondeado en ITEM DE USUARIO.
+  - Acción al tocar -> alPresionar={() => {}}.
+7. RESULTADO: Una fila más debajo de los usuarios, con círculo "UN", "Usuario Nuevo" y "Nuevo".
+
+--- RECETA: TÍTULO NUEVO ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Etiqueta texto="PRO" />
+   Baja 2 líneas hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <Texto tipo="titulo">Título nuevo</Texto>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 71 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            <Etiqueta texto="PRO" />
+          </View>
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <Texto tipo="titulo">Título nuevo</Texto>  // <<< NUEVO
+    
+          <Espacio />
+    
+  ... FIN ...
+5. IMPORT: No hace falta: Texto y Espacio ya están en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Título nuevo" (lo que está entre <Texto ...> y </Texto>).
+  - Color solo de este elemento -> color="#E53935": <Texto tipo="titulo" color="#E53935">Título nuevo</Texto>.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TÍTULOS Y TEXTOS (colorTitulo).
+  - Icono -> Texto no tiene icono; para icono + texto usa la receta "Dos elementos uno al lado del otro".
+  - Tamaño o forma -> tamano={30}, alinear="center"; para todos los títulos: tamanoTitulo en TÍTULOS Y TEXTOS. Subtítulo: tipo="subtitulo".
+  - Acción al tocar -> Texto no reacciona al toque; si debe hacer algo, usa un Boton.
+7. RESULTADO: Un texto grande en negrita "Título nuevo" debajo de la foto y el saludo.
+
+--- RECETA: TEXTO NORMAL NUEVO ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Texto tipo="subtitulo">Usuarios</Texto>
+   Pega en una línea nueva justo debajo de esa línea.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Texto>Texto nuevo</Texto>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 103 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* TEXTO: cambia "Usuarios" por lo que quieras */}
+          {/* COLOR: estilos.ts -> TÍTULOS Y TEXTOS (subtítulo) */}
+          <Texto tipo="subtitulo">Usuarios</Texto>
+          <Texto>Texto nuevo</Texto>  // <<< NUEVO
+          <Espacio tamano="chico" />
+          {/* IMAGEN / TEXTO: las filas salen de "usuarios" en src/datos/ejemplo.ts */}
+          {/* COLOR: estilos.ts -> ITEM DE USUARIO y FOTO DE PERFIL */}
+  ... FIN ...
+5. IMPORT: No hace falta: Texto ya está en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Texto nuevo".
+  - Color solo de este elemento -> color="#1E88E5": <Texto color="#1E88E5">Texto nuevo</Texto>.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TÍTULOS Y TEXTOS (colorNormal; colorPequeno si usas tipo="pequeno").
+  - Icono -> Texto no tiene icono.
+  - Tamaño o forma -> tipo="pequeno" (chico y gris), negrita, tamano={14}, alinear="center", lineas={1}.
+  - Acción al tocar -> Texto no reacciona al toque; usa un Boton.
+7. RESULTADO: Una línea de texto normal "Texto nuevo" justo debajo del título "Usuarios".
+
+--- RECETA: IMAGEN NUEVA (DE INTERNET) ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: placeholder="Buscar productos..."
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <Imagen imagen="https://picsum.photos/id/20/800/400" alto={180} bordeRedondeado={12} />
+          <Texto tipo="pequeno">Imagen nueva</Texto>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 81 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: al escribir, filtra los productos */}
+          <Buscador valor={busqueda} alCambiar={setBusqueda} placeholder="Buscar productos..." />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <Imagen imagen="https://picsum.photos/id/20/800/400" alto={180} bordeRedondeado={12} />  // <<< NUEVO
+          <Texto tipo="pequeno">Imagen nueva</Texto>  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: en src/app/index.tsx, línea 10, agrega Imagen dentro de las llaves.
+   Antes:
+  ... SOLO PARA VER (no copiar) ...
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Texto } from '@/componentes/atomos';
+  ... FIN ...
+   Después (reemplaza la línea completa):
+  >>> CODIGO >>>
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Imagen, Texto } from '@/componentes/atomos';
+  <<< FIN CODIGO <<<
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Imagen nueva" (o borra esa línea).
+  - Color solo de este elemento -> una imagen no tiene color; el gris que se ve mientras carga es fondoMientrasCarga.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> IMÁGENES (fondoMientrasCarga).
+  - Icono -> no tiene.
+  - Tamaño o forma -> alto={180}, ancho={200} (por defecto todo el ancho), bordeRedondeado={12} (0 = esquinas rectas). Círculo: ancho y alto iguales y bordeRedondeado a la mitad.
+  - Acción al tocar -> Imagen no reacciona al toque.
+7. RESULTADO: Una foto ancha con esquinas redondeadas debajo del buscador y, debajo, "Imagen nueva" en gris.
+
+--- RECETA: IMAGEN NUEVA (DE LA CARPETA ASSETS) ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: placeholder="Buscar productos..."
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <Imagen imagen={require('@/assets/images/react-logo.png')} ancho={100} alto={100} />
+          <Texto tipo="pequeno">Imagen nueva</Texto>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 81 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: al escribir, filtra los productos */}
+          <Buscador valor={busqueda} alCambiar={setBusqueda} placeholder="Buscar productos..." />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <Imagen imagen={require('@/assets/images/react-logo.png')} ancho={100} alto={100} />  // <<< NUEVO
+          <Texto tipo="pequeno">Imagen nueva</Texto>  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: en src/app/index.tsx, línea 10, agrega Imagen dentro de las llaves.
+   Antes:
+  ... SOLO PARA VER (no copiar) ...
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Texto } from '@/componentes/atomos';
+  ... FIN ...
+   Después (reemplaza la línea completa):
+  >>> CODIGO >>>
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Imagen, Texto } from '@/componentes/atomos';
+  <<< FIN CODIGO <<<
+6. CÓMO PERSONALIZARLO:
+  - Texto -> cambia "Imagen nueva" (o borra esa línea).
+  - Color solo de este elemento -> una imagen no tiene color.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> IMÁGENES (fondoMientrasCarga).
+  - Icono -> no tiene.
+  - Tamaño o forma -> ancho, alto y bordeRedondeado. Tu propia imagen: cópiala a C:\Users\Fabricio\Videos\Exa\assets\images\ y cambia el nombre en require('@/assets/images/TU-ARCHIVO.png'). Si el archivo no existe, la app muestra error.
+  - Acción al tocar -> Imagen no reacciona al toque.
+7. RESULTADO: El logo de React (100 x 100) debajo del buscador y "Imagen nueva" en gris.
+
+--- RECETA: FOTO DE PERFIL NUEVA ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <FotoPerfil nombre="Fabricio" />
+   Pega en una línea nueva justo debajo de esa línea.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+            <FotoPerfil nombre="Nuevo Usuario" />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 58 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            {/* TEXTO: cambia "Fabricio" (se usan sus iniciales) */}
+            {/* COLOR: estilos.ts -> FOTO DE PERFIL */}
+            <FotoPerfil nombre="Fabricio" />
+            <FotoPerfil nombre="Nuevo Usuario" />  // <<< NUEVO
+            <View style={styles.llenar}>
+              {/* TEXTO: cambia "Hola" por lo que quieras */}
+              {/* COLOR: estilos.ts -> TÍTULOS Y TEXTOS (título) */}
+  ... FIN ...
+5. IMPORT: No hace falta: FotoPerfil ya está en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> nombre="Nuevo Usuario" (se ven las iniciales "NU").
+  - Color solo de este elemento -> colorFondo="#E53935" (círculo) y colorTexto="#FFFFFF" (iniciales).
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> FOTO DE PERFIL.
+  - Icono -> no tiene. Foto real: imagen="https://i.pravatar.cc/150?img=12".
+  - Tamaño o forma -> tamano={64}; para todas: tamano en FOTO DE PERFIL.
+  - Acción al tocar -> FotoPerfil no reacciona al toque.
+7. RESULTADO: Un segundo círculo morado con "NU" al lado del círculo "F", antes de "Hola".
+
+--- RECETA: ETIQUETA NUEVA ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Etiqueta texto="PRO" />
+   Pega en una línea nueva justo debajo de esa línea.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+            <Etiqueta texto="Nuevo" />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 69 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            {/* TEXTO: cambia "PRO" por lo que quieras */}
+            {/* COLOR: estilos.ts -> ETIQUETA */}
+            <Etiqueta texto="PRO" />
+            <Etiqueta texto="Nuevo" />  // <<< NUEVO
+          </View>
+          {/* ===== FIN BLOQUE ===== */}
+    
+  ... FIN ...
+5. IMPORT: No hace falta: Etiqueta ya está en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> texto="Nuevo".
+  - Color solo de este elemento -> colorFondo="#E53935" y colorTexto="#FFFFFF".
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> ETIQUETA (la de las tarjetas: fondoEtiqueta en TARJETA DE PRODUCTO).
+  - Icono -> no tiene.
+  - Tamaño o forma -> tamanoTexto y bordeRedondeado en ETIQUETA (999 = píldora, 4 = casi cuadrada).
+  - Acción al tocar -> Etiqueta no reacciona al toque.
+7. RESULTADO: Una etiqueta verde "Nuevo" a la derecha de "PRO".
+
+--- RECETA: CAMPO DE TEXTO NUEVO (CON SU USESTATE) ---
+  [PARTE 1 DE 2: EL ESTADO (GUARDA LO QUE SE ESCRIBE)]
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: const [pestana, setPestana] = useState('inicio');
+   Pega en una línea nueva justo debajo de esa línea (dentro de la función, antes del return).
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+      // Texto escrito en el campo nuevo
+      const [campoNuevo, setCampoNuevo] = useState('');
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 19 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+      const [busqueda, setBusqueda] = useState('');
+      // Opción activa del menú inferior
+      const [pestana, setPestana] = useState('inicio');
+      // Texto escrito en el campo nuevo  // <<< NUEVO
+      const [campoNuevo, setCampoNuevo] = useState('');  // <<< NUEVO
+    
+      // filtra productos por el texto del buscador
+      const productosFiltrados = productos.filter((p) => p.titulo.toLowerCase().includes(busqueda.toLowerCase()));
+  ... FIN ...
+  [PARTE 2 DE 2: EL CAMPO EN LA PANTALLA]
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: placeholder="Buscar productos..."
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <CampoTexto titulo="Nuevo" icono="correo" placeholder="Escribe algo nuevo" valor={campoNuevo} alCambiar={setCampoNuevo} />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 81 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: al escribir, filtra los productos */}
+          <Buscador valor={busqueda} alCambiar={setBusqueda} placeholder="Buscar productos..." />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <CampoTexto titulo="Nuevo" icono="correo" placeholder="Escribe algo nuevo" valor={campoNuevo} alCambiar={setCampoNuevo} />  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: en src/app/index.tsx, línea 11, agrega CampoTexto dentro de las llaves.
+   Antes:
+  ... SOLO PARA VER (no copiar) ...
+    import { Buscador } from '@/componentes/moleculas';
+  ... FIN ...
+   Después (reemplaza la línea completa):
+  >>> CODIGO >>>
+    import { Buscador, CampoTexto } from '@/componentes/moleculas';
+  <<< FIN CODIGO <<<
+6. CÓMO PERSONALIZARLO:
+  - Texto -> titulo="Nuevo" (arriba), placeholder="Escribe algo nuevo" (gris). Mensaje rojo: error="Campo obligatorio".
+  - Color solo de este elemento -> colorFondo="#FFFFFF", colorBorde="#1E88E5", colorTexto="#000000".
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> CAMPO DE TEXTO.
+  - Icono -> icono="correo" (bórralo para quitarlo). Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> alto y bordeRedondeado en CAMPO DE TEXTO. Contraseña: ocultarTexto. Teclado: teclado="email-address" o "numeric".
+  - Acción al tocar -> al escribir se guarda en campoNuevo (alCambiar={setCampoNuevo}); usa campoNuevo donde lo necesites, ej. <Texto>{campoNuevo}</Texto>.
+7. RESULTADO: Debajo del buscador: el título "Nuevo", una caja blanca con un sobre y "Escribe algo nuevo" en gris.
+
+--- RECETA: BUSCADOR NUEVO ---
+  [PARTE 1 DE 2: EL ESTADO (GUARDA LO QUE SE ESCRIBE)]
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: const [pestana, setPestana] = useState('inicio');
+   Pega en una línea nueva justo debajo de esa línea (dentro de la función, antes del return).
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+      // Texto escrito en el buscador nuevo
+      const [busquedaNueva, setBusquedaNueva] = useState('');
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 19 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+      const [busqueda, setBusqueda] = useState('');
+      // Opción activa del menú inferior
+      const [pestana, setPestana] = useState('inicio');
+      // Texto escrito en el buscador nuevo  // <<< NUEVO
+      const [busquedaNueva, setBusquedaNueva] = useState('');  // <<< NUEVO
+    
+      // filtra productos por el texto del buscador
+      const productosFiltrados = productos.filter((p) => p.titulo.toLowerCase().includes(busqueda.toLowerCase()));
+  ... FIN ...
+  [PARTE 2 DE 2: EL BUSCADOR EN LA PANTALLA]
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: placeholder="Buscar productos..."
+   Baja 1 línea hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella.
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio />
+          <Buscador valor={busquedaNueva} alCambiar={setBusquedaNueva} placeholder="Nuevo buscador..." />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 81 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ACCION: al escribir, filtra los productos */}
+          <Buscador valor={busqueda} alCambiar={setBusqueda} placeholder="Buscar productos..." />
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio />  // <<< NUEVO
+          <Buscador valor={busquedaNueva} alCambiar={setBusquedaNueva} placeholder="Nuevo buscador..." />  // <<< NUEVO
+    
+          <Espacio tamano="grande" />
+    
+  ... FIN ...
+5. IMPORT: No hace falta: Buscador ya está en el import de moléculas (línea 11).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> placeholder="Nuevo buscador...".
+  - Color solo de este elemento -> colorFondo="#E3F2FD", colorBorde="#1E88E5", colorTexto="#0D47A1".
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> BUSCADOR (también la lupa: colorIcono).
+  - Icono -> la lupa es fija (nombre="buscar" en src/componentes/moleculas/Buscador.tsx).
+  - Tamaño o forma -> alto y bordeRedondeado en BUSCADOR.
+  - Acción al tocar -> al escribir se guarda en busquedaNueva. No filtra nada todavía; para que filtre los productos, en la línea de productosFiltrados cambia busqueda por busquedaNueva.
+7. RESULTADO: Una segunda caja con lupa y "Nuevo buscador..." en gris, debajo del primer buscador.
+
+--- RECETA: ICONO NUEVO EN EL ENCABEZADO ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: { icono: 'carrito', alPresionar: () => {} },
+   Pega en una línea nueva justo debajo de esa línea (antes de "]}").
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+                { icono: 'estrella', alPresionar: () => {} },
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 38 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+                // ICONO: cambia el nombre (ver lista ICONOS en src/componentes/atomos/Icono.tsx)
+                // ACCION: qué pasa al tocar el carrito (ahora no hace nada)
+                { icono: 'carrito', alPresionar: () => {} },
+                { icono: 'estrella', alPresionar: () => {} },  // <<< NUEVO
+              ]}
+            />
+            // ===== FIN BLOQUE =====
+  ... FIN ...
+5. IMPORT: No hace falta.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> los iconos del encabezado no llevan texto; el título se cambia en titulo="Inicio".
+  - Color solo de este elemento -> en <Encabezado agrega colorTexto="#E53935" (cambia título e iconos de ESTE encabezado) y colorFondo="#FFF3E0".
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> ENCABEZADO (colorIconos).
+  - Icono -> icono: 'estrella'. No repitas un icono que ya esté. Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> tamano en ICONOS (afecta a todos los iconos); alto del encabezado en ENCABEZADO.
+  - Acción al tocar -> alPresionar: () => {}. Ej: alPresionar: () => setPestana('favoritos').
+7. RESULTADO: Una estrella a la derecha del carrito, arriba en el encabezado.
+
+--- RECETA: OPCIÓN NUEVA EN EL MENÚ INFERIOR ---
+1. ARCHIVO: src/componentes/organismos/MenuInferior.tsx
+2. BUSCA CON CTRL+F: { clave: 'perfil', texto: 'Perfil', icono: 'persona' },
+   Pega en una línea nueva justo debajo de esa línea (antes de "];").
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+      { clave: 'nuevo', texto: 'Nuevo', icono: 'estrella' },
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 30 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+      { clave: 'buscar', texto: 'Buscar', icono: 'buscar' },
+      { clave: 'favoritos', texto: 'Favoritos', icono: 'corazon' },
+      { clave: 'perfil', texto: 'Perfil', icono: 'persona' },
+      { clave: 'nuevo', texto: 'Nuevo', icono: 'estrella' },  // <<< NUEVO
+    ];
+    
+    type MenuInferiorProps = {
+  ... FIN ...
+5. IMPORT: No hace falta.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> texto: 'Nuevo'.
+  - Color solo de este elemento -> se puede cambiar solo para ESTE menú (no por opción): en src/app/index.tsx usa <MenuInferior activo={pestana} alPresionar={setPestana} colorFondo="#222222" colorActivo="#F4B400" />.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> MENÚ INFERIOR (iconoActivo, iconoInactivo, fondo).
+  - Icono -> icono: 'estrella'. Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> tamanoIcono y tamanoTexto en MENÚ INFERIOR.
+  - Acción al tocar -> al tocarla se marca como activa. Para que empiece marcada: en src/app/index.tsx cambia useState('inicio') por useState('nuevo'). La clave no puede repetirse.
+7. RESULTADO: Una quinta opción con una estrella y "Nuevo" a la derecha de "Perfil"; al tocarla se pone morada.
+
+--- RECETA: SECCIÓN NUEVA COMPLETA (TÍTULO + CONTENIDO) ENTRE DOS BLOQUES ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: BLOQUE: Usuarios (lista)
+   Sube 2 líneas hasta <Espacio tamano="grande" /> y pega en una línea nueva debajo de ella (queda entre Productos y Usuarios).
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          {/* ===== BLOQUE: Sección nueva ===== */}
+          {/* QUITAR: para quitar este bloque borra desde aquí hasta "FIN BLOQUE" */}
+          <Texto tipo="subtitulo">Sección nueva</Texto>
+          <Espacio tamano="chico" />
+          <Texto>Contenido nuevo</Texto>
+          <Espacio tamano="chico" />
+          <Boton texto="Nuevo" tipo="borde" alPresionar={() => {}} />
+          {/* ===== FIN BLOQUE ===== */}
+    
+          <Espacio tamano="grande" />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 97 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+          {/* ===== FIN BLOQUE ===== */}
+    
+          <Espacio tamano="grande" />
+          {/* ===== BLOQUE: Sección nueva ===== */}  // <<< NUEVO
+          {/* QUITAR: para quitar este bloque borra desde aquí hasta "FIN BLOQUE" */}  // <<< NUEVO
+          <Texto tipo="subtitulo">Sección nueva</Texto>  // <<< NUEVO
+          <Espacio tamano="chico" />  // <<< NUEVO
+          <Texto>Contenido nuevo</Texto>  // <<< NUEVO
+          <Espacio tamano="chico" />  // <<< NUEVO
+          <Boton texto="Nuevo" tipo="borde" alPresionar={() => {}} />  // <<< NUEVO
+          {/* ===== FIN BLOQUE ===== */}  // <<< NUEVO
+    
+          <Espacio tamano="grande" />  // <<< NUEVO
+    
+          {/* ===== BLOQUE: Usuarios (lista) ===== */}
+          {/* QUITAR: para quitar este bloque borra desde aquí hasta "FIN BLOQUE" */}
+  ... FIN ...
+5. IMPORT: No hace falta: Texto, Espacio y Boton ya están en el import de átomos (línea 10).
+6. CÓMO PERSONALIZARLO:
+  - Texto -> "Sección nueva" (título), "Contenido nuevo" (texto) y texto="Nuevo" (botón).
+  - Color solo de este elemento -> color="#E53935" en cada <Texto>; colorBorde y colorTexto en el <Boton>.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TÍTULOS Y TEXTOS y BOTÓN CON BORDE.
+  - Icono -> agrega icono="estrella" al Boton. Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> cambia o agrega piezas entre BLOQUE y FIN BLOQUE (ej. una <ListaProductos ... /> o una tarjeta suelta). Separación: <Espacio tamano="chico" | "mediano" | "grande" />.
+  - Acción al tocar -> alPresionar del Boton.
+7. RESULTADO: Entre Productos y Usuarios: el subtítulo "Sección nueva", el texto "Contenido nuevo" y un botón con borde "Nuevo".
+
+--- RECETA: DOS ELEMENTOS UNO AL LADO DEL OTRO (FILA) ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Boton texto="Con borde"
+   Baja 2 líneas hasta {/* ===== FIN BLOQUE ===== */} y pega en una línea nueva debajo de ella (antes de </PlantillaPantalla>).
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+          <Espacio tamano="grande" />
+          <View style={styles.fila}>
+            <View style={styles.llenar}>
+              <Texto negrita>Nuevo</Texto>
+              <Texto tipo="pequeno">Texto nuevo a la izquierda</Texto>
+            </View>
+            <Boton texto="Nuevo" tipo="secundario" alPresionar={() => {}} />
+          </View>
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 129 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            <Boton texto="Con borde" tipo="borde" alPresionar={() => {}} />
+          </View>
+          {/* ===== FIN BLOQUE ===== */}
+          <Espacio tamano="grande" />  // <<< NUEVO
+          <View style={styles.fila}>  // <<< NUEVO
+            <View style={styles.llenar}>  // <<< NUEVO
+              <Texto negrita>Nuevo</Texto>  // <<< NUEVO
+              <Texto tipo="pequeno">Texto nuevo a la izquierda</Texto>  // <<< NUEVO
+            </View>  // <<< NUEVO
+            <Boton texto="Nuevo" tipo="secundario" alPresionar={() => {}} />  // <<< NUEVO
+          </View>  // <<< NUEVO
+        </PlantillaPantalla>
+      );
+    }
+  ... FIN ...
+5. IMPORT: No hace falta: View ya está importado (línea 8) y styles.fila / styles.llenar ya existen al final de index.tsx.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> "Nuevo", "Texto nuevo a la izquierda" y texto="Nuevo" del botón.
+  - Color solo de este elemento -> color="#E53935" en cada <Texto>; colorFondo="#E53935" en el <Boton>.
+  - Color de todos los de su tipo -> src/estilos/estilos.ts -> TÍTULOS Y TEXTOS y BOTÓN SECUNDARIO.
+  - Icono -> pon <Icono nombre="estrella" /> como primer elemento dentro de <View style={styles.fila}> (agrega Icono al import de átomos). Nombres: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir (lista ICONOS en src/componentes/atomos/Icono.tsx).
+  - Tamaño o forma -> styles.fila pone los elementos en fila; styles.llenar hace que ese elemento ocupe el espacio que sobra. Mitad y mitad: envuelve cada elemento en <View style={styles.llenar}>. Espacio entre ellos: gap en styles.fila (abajo en index.tsx, usa espacios.mediano).
+  - Acción al tocar -> alPresionar del Boton.
+7. RESULTADO: Abajo de todo: a la izquierda "Nuevo" en negrita con un texto gris debajo, y a la derecha un botón "Nuevo".
+
+--- RECETA: CAMBIAR EL COLOR DE UN SOLO ELEMENTO SIN AFECTAR A LOS DEMÁS ---
+1. ARCHIVO: src/app/index.tsx
+2. BUSCA CON CTRL+F: <Boton texto="Principal"
+   Reemplaza esa línea completa por el código de abajo (solo cambia el botón "Principal").
+3. PEGA ESTE CÓDIGO:
+  >>> CODIGO >>>
+            <Boton texto="Principal" tipo="principal" colorFondo="#E53935" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+4. DÓNDE QUEDA (líneas 118 en adelante; las marcadas con <<< NUEVO son las que pegas):
+  ... SOLO PARA VER (no copiar) ...
+            {/* TEXTO: cambia "Principal" por lo que quieras */}
+            {/* COLOR: estilos.ts -> BOTÓN PRINCIPAL */}
+            {/* ACCION: qué pasa al tocar (ahora no hace nada) */}
+    (aquí estaba: <Boton texto="Principal" tipo="principal" alPresionar={() => {}} />)
+            <Boton texto="Principal" tipo="principal" colorFondo="#E53935" alPresionar={() => {}} />  // <<< NUEVO
+            {/* TEXTO: cambia "Secundario" por lo que quieras */}
+            {/* COLOR: estilos.ts -> BOTÓN SECUNDARIO */}
+            {/* ACCION: qué pasa al tocar (ahora no hace nada) */}
+  ... FIN ...
+5. IMPORT: No hace falta.
+6. CÓMO PERSONALIZARLO:
+  - Texto -> texto="Principal".
+  - Color solo de este elemento -> agrega la prop de color al elemento, no a estilos.ts. Props por componente: Texto -> color; Boton -> colorFondo, colorTexto, colorBorde; Etiqueta -> colorFondo, colorTexto; Icono y BotonIcono -> color; FotoPerfil -> colorFondo, colorTexto; Buscador y CampoTexto -> colorFondo, colorBorde, colorTexto; ItemUsuario y TarjetaProducto -> colorFondo, colorTexto; Encabezado -> colorFondo, colorTexto; MenuInferior -> colorFondo, colorActivo; PlantillaPantalla -> colorFondo.
+  - Color de todos los de su tipo -> el bloque de src/estilos/estilos.ts (aquí: BOTÓN PRINCIPAL).
+  - Icono -> el color de un icono suelto: <Icono nombre="estrella" color="#F4B400" />.
+  - Tamaño o forma -> un solo producto o usuario de la lista: en src/datos/ejemplo.ts agrega colorFondo: '#FFF3E0' dentro de su objeto.
+  - Acción al tocar -> alPresionar={() => {}}.
+7. RESULTADO: El botón "Principal" se ve rojo; los demás botones y el resto de la pantalla no cambian.
+
+==============================================================================
+1. MAPA RÁPIDO
+==============================================================================
+
+Abre el archivo, presiona Ctrl+F y pega lo de la columna "Buscar". Los números de línea son aproximados: cambian cuando editas.
+
+--- TEXTOS VISIBLES ---
+
+  Quiero cambiar                                                |  Archivo                                      |  Buscar (Ctrl+F)
+  --------------------------------------------------------------+-----------------------------------------------+---------------------------
+  Título del encabezado ("Inicio")                              |  src/app/index.tsx                            |  titulo="Inicio"
+  Saludo "Hola"                                                 |  src/app/index.tsx                            |  <Texto tipo="titulo">Hola
+  Texto "Bienvenido de nuevo"                                   |  src/app/index.tsx                            |  Bienvenido de nuevo
+  Iniciales de la foto de perfil ("Fabricio")                   |  src/app/index.tsx                            |  <FotoPerfil nombre=
+  Etiqueta "PRO"                                                |  src/app/index.tsx                            |  <Etiqueta texto=
+  Texto gris del buscador                                       |  src/app/index.tsx                            |  placeholder=
+  Título "Productos"                                            |  src/app/index.tsx                            |  >Productos<
+  Título "Usuarios"                                             |  src/app/index.tsx                            |  >Usuarios<
+  Texto de los botones (Principal, Secundario, Con borde)       |  src/app/index.tsx                            |  <Boton texto=
+  Textos del menú inferior (Inicio, Buscar, Favoritos, Perfil)  |  src/componentes/organismos/MenuInferior.tsx  |  OPCIONES_POR_DEFECTO
+  Opción del menú marcada al abrir                              |  src/app/index.tsx                            |  useState('inicio')
+
+--- ICONOS ---
+
+  Quiero cambiar                          |  Archivo                                      |  Buscar (Ctrl+F)
+  ----------------------------------------+-----------------------------------------------+-------------------------
+  Campana del encabezado                  |  src/app/index.tsx                            |  icono: 'notificaciones'
+  Carrito del encabezado                  |  src/app/index.tsx                            |  icono: 'carrito'
+  Iconos del menú inferior                |  src/componentes/organismos/MenuInferior.tsx  |  OPCIONES_POR_DEFECTO
+  Lista de nombres de iconos disponibles  |  src/componentes/atomos/Icono.tsx             |  const ICONOS
+
+--- DATOS E IMÁGENES ---
+
+  Quiero cambiar                               |  Archivo               |  Buscar (Ctrl+F)
+  ---------------------------------------------+------------------------+-----------------
+  Nombre, descripción o imagen de un producto  |  src/datos/ejemplo.ts  |  productos
+  Etiqueta "Nuevo" de una tarjeta              |  src/datos/ejemplo.ts  |  etiqueta:
+  Nombre, descripción o foto de un usuario     |  src/datos/ejemplo.ts  |  usuarios
+
+--- COLORES Y TAMAÑOS (TODO EN SRC/ESTILOS/ESTILOS.TS) ---
+
+  Quiero cambiar                                                                  |  Archivo                            |  Buscar (Ctrl+F)
+  --------------------------------------------------------------------------------+-------------------------------------+------------------------------------------------------
+  Fondo de la pantalla y margen                                                   |  src/estilos/estilos.ts             |  FONDO GENERAL
+  Separaciones entre elementos                                                    |  src/estilos/estilos.ts             |  = ESPACIOS =
+  Color y tamaño de "Hola", "Productos", "Usuarios" y textos chicos               |  src/estilos/estilos.ts             |  TÍTULOS Y TEXTOS
+  Encabezado (fondo, título, iconos, línea)                                       |  src/estilos/estilos.ts             |  = ENCABEZADO =
+  Buscador (fondo, borde, lupa, texto)                                            |  src/estilos/estilos.ts             |  = BUSCADOR =
+  Botón principal                                                                 |  src/estilos/estilos.ts             |  BOTÓN PRINCIPAL
+  Botón secundario                                                                |  src/estilos/estilos.ts             |  BOTÓN SECUNDARIO
+  Botón con borde                                                                 |  src/estilos/estilos.ts             |  BOTÓN CON BORDE
+  Tarjetas de producto (fondo, sombra, textos, etiqueta "Nuevo", alto de imagen)  |  src/estilos/estilos.ts             |  TARJETA DE PRODUCTO
+  Filas de usuario (fondo, nombre, descripción, flecha)                           |  src/estilos/estilos.ts             |  ITEM DE USUARIO
+  Círculo con iniciales                                                           |  src/estilos/estilos.ts             |  FOTO DE PERFIL
+  Etiqueta "PRO"                                                                  |  src/estilos/estilos.ts             |  = ETIQUETA =
+  Menú inferior (fondo, icono activo e inactivo)                                  |  src/estilos/estilos.ts             |  MENÚ INFERIOR
+  Campo de texto de formulario                                                    |  src/estilos/estilos.ts             |  CAMPO DE TEXTO
+  Color de UN solo elemento (sin tocar los demás)                                 |  el archivo donde está el elemento  |  ver la receta "Cambiar el color de UN solo elemento"
+
+==============================================================================
+2. ÁTOMOS
+==============================================================================
+
+Piezas más pequeñas. Están en src/componentes/atomos/. Se importan así (línea 10 de index.tsx):
+
+  >>> CODIGO >>>
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Texto } from '@/componentes/atomos';
+  <<< FIN CODIGO <<<
+
+Si usas un átomo que no está en esa línea (por ejemplo Icono o Imagen), agrégalo dentro de las llaves.
+
+--- TEXTO ---
+
+  - Qué es: cualquier texto de la pantalla.
+  - Dónde aparece: "Hola", "Bienvenido de nuevo", "Productos", "Usuarios", y dentro de botones, tarjetas, filas y menú.
+  - Archivo: src/componentes/atomos/Texto.tsx
+
+  Prop     |  Qué cambia
+  ---------+---------------------------------------------------------------------------------------------
+  tipo     |  'titulo' (24), 'subtitulo' (18), 'normal' (16), 'pequeno' (12, gris). Por defecto 'normal'.
+  color    |  Color solo de este texto, ej. color="#E53935".
+  tamano   |  Tamaño solo de este texto, ej. tamano={30}.
+  alinear  |  'left', 'center' o 'right'.
+  negrita  |  Escribe negrita para ponerlo en negrita.
+  lineas   |  Máximo de líneas; si no cabe corta con "...".
+
+Cómo usarlo / duplicarlo (pégalo en index.tsx):
+
+  >>> CODIGO >>>
+    <Texto tipo="subtitulo">Mi título</Texto>
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: cambia lo que está entre <Texto ...> y </Texto>.
+
+Cómo cambiar el color: estilos.ts -> TÍTULOS Y TEXTOS. colorTitulo (línea 43), colorSubtitulo (45), colorNormal (47), colorPequeno (49). Los tamaños están justo debajo de cada color. Para un solo texto usa la prop color.
+
+--- BOTON ---
+
+  - Qué es: botón con texto e icono opcional.
+  - Dónde aparece: fila de botones "Principal", "Secundario" y "Con borde" (abajo, antes del menú).
+  - Archivo: src/componentes/atomos/Boton.tsx
+
+  Prop                                  |  Qué cambia
+  --------------------------------------+-------------------------------------------------------------------------------------------------------------
+  texto                                 |  El texto del botón.
+  alPresionar                           |  Qué pasa al tocarlo, ej. alPresionar={() => {}}.
+  tipo                                  |  'principal' (relleno), 'secundario' (relleno de otro color), 'borde' (solo borde). Por defecto 'principal'.
+  icono                                 |  Icono a la izquierda del texto (nombre de la lista ICONOS).
+  anchoCompleto                         |  Escribe anchoCompleto para que ocupe todo el ancho.
+  desactivado                           |  Escribe desactivado para que no se pueda tocar.
+  colorFondo / colorTexto / colorBorde  |  Opcionales: color solo de ESTE botón, ej. colorFondo="#E53935". Si no se ponen, usa estilos.ts.
+
+Cómo usarlo / duplicarlo:
+
+  >>> CODIGO >>>
+    <Boton texto="Ingresar" tipo="principal" icono="persona" anchoCompleto alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop texto. En index.tsx busca <Boton texto=.
+
+Cómo cambiar el color: estilos.ts -> BOTÓN PRINCIPAL (fondo línea 112, colorTexto 113), BOTÓN SECUNDARIO (fondo 122, colorTexto 123), BOTÓN CON BORDE (colorTexto 133, colorBorde 134). En cada bloque también están bordeRedondeado y alto.
+
+--- ENTRADA ---
+
+  - Qué es: la caja donde se escribe (sin borde ni fondo).
+  - Dónde aparece: no se usa sola en la pantalla; va dentro de Buscador y de CampoTexto.
+  - Archivo: src/componentes/atomos/Entrada.tsx
+
+  Prop                                         |  Qué cambia
+  ---------------------------------------------+----------------------------------------------------------
+  valor                                        |  El texto escrito (viene de un useState).
+  alCambiar                                    |  Función que recibe el texto nuevo (ej. setNombre).
+  placeholder                                  |  Texto gris cuando está vacía.
+  ocultarTexto                                 |  Escribe ocultarTexto para contraseñas.
+  teclado                                      |  'default', 'email-address', 'numeric'...
+  colorTexto / colorPlaceholder / tamanoTexto  |  Color del texto, color del texto gris y tamaño de letra.
+
+Cómo usarlo / duplicarlo: mejor usa Buscador o CampoTexto, que ya traen borde y fondo. Si la necesitas sola, primero crea el estado arriba del return (junto a la línea 19 de index.tsx) y agrega Entrada al import de átomos:
+
+  >>> CODIGO >>>
+    const [nombre, setNombre] = useState('');
+  <<< FIN CODIGO <<<
+
+  >>> CODIGO >>>
+    <Entrada valor={nombre} alCambiar={setNombre} placeholder="Tu nombre" />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop placeholder.
+
+Cómo cambiar el color: sola usa estilos.ts -> TÍTULOS Y TEXTOS (colorNormal y colorPequeno). Dentro del buscador usa BUSCADOR; dentro de un campo usa CAMPO DE TEXTO.
+
+--- ICONO ---
+
+  - Qué es: un icono (expo-symbols; Ionicons no está instalado).
+  - Dónde aparece: campana y carrito del encabezado, lupa del buscador, flecha de las filas de usuario y los 4 iconos del menú inferior.
+  - Archivo: src/componentes/atomos/Icono.tsx (lista ICONOS en las líneas 22 a 42).
+
+  Prop    |  Qué cambia
+  --------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  nombre  |  Nombre del icono. Disponibles: inicio, buscar, persona, ajustes, corazon, carrito, notificaciones, atras, flecha, agregar, cerrar, menu, correo, candado, estrella, ojo, filtro, mas, salir.
+  tamano  |  Tamaño en píxeles (por defecto 24).
+  color   |  Color del icono.
+
+Cómo usarlo / duplicarlo (agrega Icono al import de átomos):
+
+  >>> CODIGO >>>
+    <Icono nombre="estrella" tamano={24} color="#F4B400" />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el icono: cambia nombre. Para uno nuevo, agrega una línea dentro de ICONOS en Icono.tsx (nombre iOS de SF Symbols y nombre Android de fonts.google.com/icons):
+
+  >>> CODIGO >>>
+      camara: { ios: 'camera', android: 'photo_camera', web: 'photo_camera' },
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el color: estilos.ts -> ICONOS (colorPorDefecto, línea 60). Los iconos de cada sección usan su propio bloque: ENCABEZADO (colorIconos), BUSCADOR (colorIcono), ITEM DE USUARIO (colorFlecha), MENÚ INFERIOR (iconoActivo, iconoInactivo).
+
+--- IMAGEN ---
+
+  - Qué es: una imagen de internet o de la carpeta assets.
+  - Dónde aparece: arriba de cada tarjeta de producto y en las fotos de perfil.
+  - Archivo: src/componentes/atomos/Imagen.tsx
+
+  Prop             |  Qué cambia
+  -----------------+------------------------------------------------------------------------
+  imagen           |  URL en texto ('https://...') o require('@/assets/images/archivo.png').
+  ancho            |  Ancho (número o porcentaje). Por defecto '100%'.
+  alto             |  Alto. Por defecto 150.
+  bordeRedondeado  |  Esquinas redondeadas. Por defecto 0.
+
+Cómo usarlo / duplicarlo (agrega Imagen al import de átomos):
+
+  >>> CODIGO >>>
+    <Imagen imagen="https://picsum.photos/400/300" alto={200} bordeRedondeado={12} />
+  <<< FIN CODIGO <<<
+
+  >>> CODIGO >>>
+    <Imagen imagen={require('@/assets/images/icon.png')} ancho={80} alto={80} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar la imagen: prop imagen. Los archivos locales van en C:\Users\Fabricio\Videos\Exa\assets\images\.
+
+Cómo cambiar el color: solo tiene el gris mientras carga: estilos.ts -> IMÁGENES (fondoMientrasCarga, línea 66).
+
+--- FOTOPERFIL ---
+
+  - Qué es: círculo con foto; si no hay foto, muestra las iniciales.
+  - Dónde aparece: arriba a la izquierda ("F" de Fabricio) y en cada fila de usuario.
+  - Archivo: src/componentes/atomos/FotoPerfil.tsx
+
+  Prop                     |  Qué cambia
+  -------------------------+---------------------------------------------------------------------
+  imagen                   |  La foto (URL o require). Si no se pone, salen iniciales.
+  nombre                   |  De aquí salen las iniciales: "Ana Pérez" -> "AP".
+  tamano                   |  Diámetro del círculo. Por defecto 48.
+  colorFondo / colorTexto  |  Opcionales: color del círculo y de las iniciales solo de ESTA foto.
+
+Cómo usarlo / duplicarlo:
+
+  >>> CODIGO >>>
+    <FotoPerfil nombre="Ana Pérez" imagen="https://i.pravatar.cc/150?img=47" tamano={64} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop nombre (en index.tsx busca <FotoPerfil nombre=).
+
+Cómo cambiar el color: estilos.ts -> FOTO DE PERFIL. fondoIniciales (línea 175), colorIniciales (176), tamano (174).
+
+--- ETIQUETA ---
+
+  - Qué es: etiqueta chica con fondo de color, forma de píldora.
+  - Dónde aparece: "PRO" (arriba a la derecha) y "Nuevo" en la tarjeta de Auriculares.
+  - Archivo: src/componentes/atomos/Etiqueta.tsx
+
+  Prop        |  Qué cambia
+  ------------+---------------------------------------------------
+  texto       |  El texto de la etiqueta.
+  colorFondo  |  Fondo solo de esta etiqueta (opcional).
+  colorTexto  |  Color del texto solo de esta etiqueta (opcional).
+
+Cómo usarlo / duplicarlo:
+
+  >>> CODIGO >>>
+    <Etiqueta texto="Oferta" />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop texto. "PRO" está en index.tsx (busca <Etiqueta texto=). "Nuevo" está en src/datos/ejemplo.ts (etiqueta:).
+
+Cómo cambiar el color: "PRO" usa estilos.ts -> ETIQUETA (fondo línea 181, colorTexto 182). "Nuevo" usa TARJETA DE PRODUCTO (fondoEtiqueta línea 156, colorTextoEtiqueta 157).
+
+--- ESPACIO ---
+
+  - Qué es: espacio vacío para separar elementos.
+  - Dónde aparece: entre los bloques de index.tsx (no se ve, solo separa).
+  - Archivo: src/componentes/atomos/Espacio.tsx
+
+  Prop        |  Qué cambia
+  ------------+------------------------------------------------------------------------------------------------------
+  tamano      |  'muyChico' (4), 'chico' (8), 'mediano' (16), 'grande' (24), 'muyGrande' (32). Por defecto 'mediano'.
+  horizontal  |  Escribe horizontal para separar a lo ancho dentro de una fila.
+
+Cómo usarlo / duplicarlo:
+
+  >>> CODIGO >>>
+    <Espacio tamano="grande" />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el tamaño: estilos.ts -> ESPACIOS (líneas 34 a 38).
+
+==============================================================================
+3. MOLÉCULAS
+==============================================================================
+
+Combinaciones de átomos. Están en src/componentes/moleculas/. Se importan así (línea 11 de index.tsx):
+
+  >>> CODIGO >>>
+    import { Buscador } from '@/componentes/moleculas';
+  <<< FIN CODIGO <<<
+
+Para usar otra molécula, agrégala dentro de las llaves, ej. { Buscador, CampoTexto }.
+
+--- CAMPOTEXTO ---
+
+  - Qué es: campo de formulario: título arriba, caja para escribir y mensaje de error rojo abajo.
+  - Dónde aparece: ahora no está en la pantalla (era del login). Úsalo para formularios.
+  - Usa los átomos: Texto, Icono, Entrada.
+  - Archivo: src/componentes/moleculas/CampoTexto.tsx
+
+  Prop                                  |  Qué cambia
+  --------------------------------------+---------------------------------------------------
+  titulo                                |  Texto encima de la caja (ej. "Email").
+  valor / alCambiar                     |  Texto escrito y función que lo guarda (useState).
+  placeholder                           |  Texto gris cuando está vacío.
+  icono                                 |  Icono a la izquierda (lista ICONOS).
+  ocultarTexto                          |  Escribe ocultarTexto para contraseñas.
+  teclado                               |  'default', 'email-address', 'numeric'...
+  error                                 |  Texto rojo debajo. Si está vacío no se muestra.
+  colorFondo / colorBorde / colorTexto  |  Opcionales: colores solo de ESTE campo.
+
+Cómo usarlo / duplicarlo. Paso 1: crea el estado arriba del return (junto a la línea 19 de index.tsx):
+
+  >>> CODIGO >>>
+    const [email, setEmail] = useState('');
+  <<< FIN CODIGO <<<
+
+Paso 2: pégalo en la pantalla:
+
+  >>> CODIGO >>>
+    <CampoTexto titulo="Email" icono="correo" placeholder="correo@ejemplo.com" teclado="email-address" valor={email} alCambiar={setEmail} />
+  <<< FIN CODIGO <<<
+
+Paso 3: agrega CampoTexto al import de moléculas: { Buscador, CampoTexto }.
+
+Cómo cambiar el texto: props titulo, placeholder y error.
+
+Cómo cambiar el color: estilos.ts -> CAMPO DE TEXTO (fondo línea 96, colorBorde 97, colorBordeError 98, colorTitulo 101, colorError 105).
+
+--- BUSCADOR ---
+
+  - Qué es: caja de búsqueda con lupa.
+  - Dónde aparece: debajo del saludo. Filtra los productos por título.
+  - Usa los átomos: Icono, Entrada.
+  - Archivo: src/componentes/moleculas/Buscador.tsx
+
+  Prop                                  |  Qué cambia
+  --------------------------------------+----------------------------------------------------------
+  valor                                 |  Texto escrito (en index.tsx: busqueda).
+  alCambiar                             |  Función que guarda el texto (en index.tsx: setBusqueda).
+  placeholder                           |  Texto gris. Por defecto "Buscar...".
+  colorFondo / colorBorde / colorTexto  |  Opcionales: colores solo de ESTE buscador.
+
+Cómo usarlo / duplicarlo (es la línea 82 de index.tsx):
+
+  >>> CODIGO >>>
+    <Buscador valor={busqueda} alCambiar={setBusqueda} placeholder="Buscar productos..." />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop placeholder.
+
+Cómo cambiar el color: estilos.ts -> BUSCADOR (fondo línea 82, colorBorde 83, bordeRedondeado 85, colorTexto 86, colorPlaceholder 87, colorIcono 88, alto 90).
+
+--- ITEMUSUARIO ---
+
+  - Qué es: una fila con foto redonda, nombre, descripción y flecha a la derecha.
+  - Dónde aparece: cada fila de la lista "Usuarios".
+  - Usa los átomos: FotoPerfil, Texto, Icono.
+  - Archivo: src/componentes/moleculas/ItemUsuario.tsx
+
+  Prop                     |  Qué cambia
+  -------------------------+--------------------------------------------------------------------
+  nombre                   |  Texto en negrita (también da las iniciales).
+  descripcion              |  Texto gris debajo del nombre.
+  imagen                   |  Foto. Sin foto salen iniciales.
+  alPresionar              |  Qué pasa al tocar la fila.
+  colorFondo / colorTexto  |  Opcionales: fondo de la fila y color del nombre solo de ESTA fila.
+
+Cómo usarlo / duplicarlo (fila suelta, fuera de la lista; agrega ItemUsuario al import de moléculas):
+
+  >>> CODIGO >>>
+    <ItemUsuario nombre="Ana Pérez" descripcion="Diseñadora" imagen="https://i.pravatar.cc/150?img=47" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: los de la lista se cambian en src/datos/ejemplo.ts (usuarios).
+
+Cómo cambiar el color: estilos.ts -> ITEM DE USUARIO (fondo línea 162, fondoPresionado 163, colorNombre 165, colorDescripcion 167, colorFlecha 169). El círculo de iniciales: FOTO DE PERFIL.
+
+--- TARJETAPRODUCTO ---
+
+  - Qué es: tarjeta con imagen arriba y debajo etiqueta opcional, título y descripción.
+  - Dónde aparece: cada tarjeta de "Productos".
+  - Usa los átomos: Imagen, Etiqueta, Texto.
+  - Archivo: src/componentes/moleculas/TarjetaProducto.tsx
+
+  Prop                     |  Qué cambia
+  -------------------------+--------------------------------------------------------------------------
+  titulo                   |  Texto en negrita (1 línea).
+  descripcion              |  Texto gris (máximo 2 líneas). Aquí va el precio si lo necesitas.
+  imagen                   |  Imagen de la tarjeta (URL o require).
+  etiqueta                 |  Texto de la etiqueta, ej. "Nuevo". Si no se pone, no aparece.
+  alPresionar              |  Qué pasa al tocar la tarjeta.
+  colorFondo / colorTexto  |  Opcionales: fondo de la tarjeta y color del título solo de ESTA tarjeta.
+
+Cómo usarlo / duplicarlo (tarjeta suelta, fuera de la grilla; agrega TarjetaProducto al import de moléculas):
+
+  >>> CODIGO >>>
+    <TarjetaProducto titulo="Cámara" descripcion="$199" imagen="https://picsum.photos/400/300" etiqueta="Nuevo" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: los de la grilla se cambian en src/datos/ejemplo.ts (productos).
+
+Cómo cambiar el color: estilos.ts -> TARJETA DE PRODUCTO (fondo línea 142, colorBorde 143, grosorBorde 144, bordeRedondeado 145, sombra 146 a 150, altoImagen 151, colorTitulo 152, colorDescripcion 154, fondoEtiqueta 156).
+
+--- BOTONICONO ---
+
+  - Qué es: botón que solo tiene un icono.
+  - Dónde aparece: campana y carrito del encabezado (y la flecha atrás si la activas).
+  - Usa el átomo: Icono.
+  - Archivo: src/componentes/moleculas/BotonIcono.tsx
+
+  Prop         |  Qué cambia
+  -------------+----------------------------------
+  icono        |  Nombre del icono (lista ICONOS).
+  alPresionar  |  Qué pasa al tocarlo.
+  color        |  Color del icono.
+  tamano       |  Tamaño. Por defecto 24.
+
+Cómo usarlo / duplicarlo (agrega BotonIcono al import de moléculas):
+
+  >>> CODIGO >>>
+    <BotonIcono icono="ajustes" alPresionar={() => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el color: dentro del encabezado usa estilos.ts -> ENCABEZADO (colorIconos, línea 74). Suelto usa ICONOS (colorPorDefecto, línea 60) o la prop color.
+
+==============================================================================
+4. ORGANISMOS
+==============================================================================
+
+Secciones completas. Están en src/componentes/organismos/. Se importan así (línea 12 de index.tsx):
+
+  >>> CODIGO >>>
+    import { Encabezado, ListaProductos, ListaUsuarios, MenuInferior } from '@/componentes/organismos';
+  <<< FIN CODIGO <<<
+
+--- ENCABEZADO ---
+
+  - Qué es: barra de arriba con flecha atrás opcional, título e iconos a la derecha.
+  - Dónde aparece: arriba de todo ("Inicio" + campana + carrito).
+  - Usa: la molécula BotonIcono y el átomo Texto.
+  - Archivo: src/componentes/organismos/Encabezado.tsx
+
+  Prop                     |  Qué cambia
+  -------------------------+------------------------------------------------------------------------------
+  titulo                   |  Texto del título.
+  alVolver                 |  Qué pasa al tocar la flecha. Si no se pone, la flecha no aparece.
+  acciones                 |  Iconos de la derecha: lista de { icono, alPresionar }. No repitas un icono.
+  colorFondo / colorTexto  |  Opcionales: fondo, y color del título y los iconos, solo de ESTE encabezado.
+
+Cómo usarlo / duplicarlo (así está en index.tsx, líneas 32 a 42):
+
+  >>> CODIGO >>>
+    <Encabezado
+      titulo="Inicio"
+      acciones={[
+        { icono: 'notificaciones', alPresionar: () => {} },
+        { icono: 'carrito', alPresionar: () => {} },
+      ]}
+    />
+  <<< FIN CODIGO <<<
+
+Agregar un icono a la derecha: agrega otra línea dentro de acciones, ej. { icono: 'ajustes', alPresionar: () => {} },. Quitar uno: borra su línea.
+
+Poner flecha atrás: agrega import { router } from 'expo-router'; arriba de index.tsx y la prop:
+
+  >>> CODIGO >>>
+    <Encabezado titulo="Detalle" alVolver={() => router.back()} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar el texto: prop titulo (busca titulo="Inicio").
+
+Cómo cambiar el color: estilos.ts -> ENCABEZADO (fondo línea 71, colorTitulo 72, tamanoTitulo 73, colorIconos 74, colorLinea 75, alto 77).
+
+--- LISTAUSUARIOS ---
+
+  - Qué es: lista vertical de usuarios, una fila por cada uno.
+  - Dónde aparece: debajo del título "Usuarios".
+  - Usa la molécula: ItemUsuario.
+  - Archivo: src/componentes/organismos/ListaUsuarios.tsx
+
+  Prop                |  Qué cambia
+  --------------------+-------------------------------------------------------------------------------------------------------------------------------
+  usuarios            |  Arreglo de { id, nombre, descripcion?, imagen?, colorFondo? } (sale de src/datos/ejemplo.ts). colorFondo pinta solo esa fila.
+  alPresionarUsuario  |  Qué pasa al tocar una fila; recibe el usuario tocado.
+
+Cómo usarlo / duplicarlo (línea 110 de index.tsx):
+
+  >>> CODIGO >>>
+    <ListaUsuarios usuarios={usuarios} alPresionarUsuario={(usuario) => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar los textos: en src/datos/ejemplo.ts (ver sección 7).
+
+Cómo cambiar el color: estilos.ts -> ITEM DE USUARIO y FOTO DE PERFIL.
+
+--- LISTAPRODUCTOS ---
+
+  - Qué es: grilla de tarjetas de producto (2 columnas).
+  - Dónde aparece: debajo del título "Productos".
+  - Usa la molécula: TarjetaProducto.
+  - Archivo: src/componentes/organismos/ListaProductos.tsx
+
+  Prop                 |  Qué cambia
+  ---------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  productos            |  Arreglo de { id, titulo, descripcion?, imagen, etiqueta?, colorFondo? }. En index.tsx se le pasa productosFiltrados (filtrados por el buscador). colorFondo pinta solo esa tarjeta.
+  alPresionarProducto  |  Qué pasa al tocar una tarjeta; recibe el producto tocado.
+  columnas             |  Tarjetas por fila. Por defecto 2. Pon columnas={1} para una sola columna.
+
+Cómo usarlo / duplicarlo (línea 96 de index.tsx):
+
+  >>> CODIGO >>>
+    <ListaProductos productos={productosFiltrados} columnas={2} alPresionarProducto={(producto) => {}} />
+  <<< FIN CODIGO <<<
+
+Cómo cambiar los textos: en src/datos/ejemplo.ts (ver sección 7).
+
+Cómo cambiar el color: estilos.ts -> TARJETA DE PRODUCTO.
+
+--- MENUINFERIOR ---
+
+  - Qué es: barra de abajo con 4 opciones (icono + texto). Solo es visual: marca la opción tocada, no cambia de pantalla.
+  - Dónde aparece: abajo de todo, fija.
+  - Usa los átomos: Icono y Texto (no usa moléculas).
+  - Archivo: src/componentes/organismos/MenuInferior.tsx
+
+  Prop                      |  Qué cambia
+  --------------------------+----------------------------------------------------------------------------
+  opciones                  |  Lista de { clave, texto, icono }. Si no se pone, usa OPCIONES_POR_DEFECTO.
+  activo                    |  Clave de la opción resaltada.
+  alPresionar               |  Qué pasa al tocar una opción; recibe su clave.
+  colorFondo / colorActivo  |  Opcionales: fondo y color de la opción activa solo de ESTE menú.
+
+Así está en index.tsx (línea 51):
+
+  >>> CODIGO >>>
+    <MenuInferior activo={pestana} alPresionar={setPestana} />
+  <<< FIN CODIGO <<<
+
+Cambiar iconos y textos: abre MenuInferior.tsx, busca OPCIONES_POR_DEFECTO (líneas 28 a 33). Cada línea es una opción:
+
+  >>> CODIGO >>>
+    const OPCIONES_POR_DEFECTO: OpcionMenu[] = [
+      { clave: 'inicio', texto: 'Inicio', icono: 'inicio' },
+      { clave: 'buscar', texto: 'Buscar', icono: 'buscar' },
+      { clave: 'favoritos', texto: 'Favoritos', icono: 'corazon' },
+      { clave: 'perfil', texto: 'Perfil', icono: 'persona' },
+    ];
+  <<< FIN CODIGO <<<
+
+  - texto: lo que se lee debajo del icono.
+  - icono: nombre de la lista ICONOS.
+  - clave: nombre interno; no se ve, pero no puede repetirse.
+
+Cuál está activo al abrir: en index.tsx, línea 21, cambia la clave:
+
+  >>> CODIGO >>>
+    const [pestana, setPestana] = useState('inicio');
+  <<< FIN CODIGO <<<
+
+Agregar una opción: copia una línea de OPCIONES_POR_DEFECTO, pégala debajo y cambia clave, texto e icono:
+
+  >>> CODIGO >>>
+      { clave: 'carrito', texto: 'Carrito', icono: 'carrito' },
+  <<< FIN CODIGO <<<
+
+Quitar una opción: borra su línea completa. Si borras la que está en useState, cambia useState a otra clave que exista.
+
+Cómo cambiar el color: estilos.ts -> MENÚ INFERIOR (fondo línea 189, colorLinea 190, iconoActivo 192, iconoInactivo 193, tamanoIcono 194, tamanoTexto 195). El texto toma el mismo color que su icono.
+
+==============================================================================
+5. PLANTILLA
+==============================================================================
+
+--- PLANTILLAPANTALLA ---
+
+  - Qué es: el esqueleto de la pantalla. Respeta el notch, pone el encabezado arriba fijo, el contenido en medio (con scroll) y el pie abajo fijo.
+  - Archivo: src/componentes/plantillas/PlantillaPantalla.tsx
+  - Color de fondo y margen: estilos.ts -> FONDO GENERAL DE LA PANTALLA (fondo línea 27, margen 28).
+
+  Prop        |  Qué cambia
+  ------------+-----------------------------------------------------------------------------
+  encabezado  |  Lo que va arriba fijo. En index.tsx: <Encabezado ... />.
+  pie         |  Lo que va abajo fijo. En index.tsx: <MenuInferior ... />.
+  scroll      |  Por defecto hace scroll. scroll={false} = contenido fijo.
+  conMargen   |  Por defecto deja margen. conMargen={false} = contenido pegado a los bordes.
+  colorFondo  |  Opcional: fondo solo de ESTA pantalla.
+
+Pantalla mínima para copiar:
+
+  >>> CODIGO >>>
+    <PlantillaPantalla encabezado={<Encabezado titulo="Mi pantalla" />} pie={<MenuInferior />}>
+      <Texto tipo="titulo">Hola</Texto>
+    </PlantillaPantalla>
+  <<< FIN CODIGO <<<
+
+  - Quitar el encabezado: en index.tsx borra desde la línea "encabezado={" (28) hasta su "}" (44).
+  - Quitar el pie: borra desde "pie={" (45) hasta la línea 53 "}>", pero deja el ">" para que la etiqueta quede cerrada: <PlantillaPantalla ... >
+  - Quitar el scroll: agrega scroll={false} dentro de <PlantillaPantalla (línea 27).
+
+==============================================================================
+6. PÁGINA (SRC/APP/INDEX.TSX)
+==============================================================================
+
+Bloques en el orden en que se ven en pantalla, de arriba a abajo. Cada uno empieza con "===== BLOQUE:" y termina con "===== FIN BLOQUE =====".
+
+  #  |  Bloque              |  Líneas     |  Qué tiene
+  ---+----------------------+-------------+--------------------------------------------------------------------------
+  1  |  Encabezado          |  29 a 43    |  Título "Inicio", campana y carrito. Es la prop encabezado (fijo arriba).
+  2  |  Perfil del usuario  |  54 a 73    |  FotoPerfil "Fabricio", "Hola", "Bienvenido de nuevo", etiqueta "PRO".
+  3  |  Buscador            |  77 a 83    |  Buscador con "Buscar productos...".
+  4  |  Productos           |  87 a 97    |  Título "Productos" y ListaProductos.
+  5  |  Usuarios            |  101 a 111  |  Título "Usuarios" y ListaUsuarios.
+  6  |  Botones             |  115 a 131  |  Botones "Principal", "Secundario" y "Con borde".
+  7  |  Menú inferior       |  46 a 52    |  MenuInferior. Es la prop pie (fijo abajo).
+
+Entre bloques hay un <Espacio /> que los separa (líneas 75, 85, 99 y 113).
+
+--- CAMBIAR UN BLOQUE ---
+
+Busca el nombre del bloque con Ctrl+F (ej. "BLOQUE: Buscador") y edita las líneas marcadas con TEXTO, COLOR, IMAGEN, ICONO o ACCION.
+
+--- MOVER UN BLOQUE ---
+
+  - Selecciona desde la línea "===== BLOQUE: ..." hasta "===== FIN BLOQUE =====".
+  - Córtalo (Ctrl+X) y pégalo (Ctrl+V) entre otros dos bloques.
+  - Revisa que siga habiendo un <Espacio /> entre bloques.
+
+--- DUPLICAR UN BLOQUE ---
+
+  - Copia desde "===== BLOQUE: ..." hasta "===== FIN BLOQUE =====".
+  - Pégalo debajo del FIN BLOQUE, deja un <Espacio /> entre los dos y cambia los textos.
+
+--- BORRAR UN BLOQUE ---
+
+  - Bloques 2 a 6: borra desde "===== BLOQUE: ..." hasta "===== FIN BLOQUE =====" (incluidas esas dos líneas) y el <Espacio /> que sobre.
+  - Bloques 1 y 7 (encabezado y menú): ver sección 5, "Quitar el encabezado" y "Quitar el pie".
+
+--- ETIQUETAS DE LOS COMENTARIOS ---
+
+  Etiqueta                 |  Qué significa
+  -------------------------+------------------------------------------------------
+  ===== BLOQUE: ... =====  |  Empieza una parte visual.
+  ===== FIN BLOQUE =====   |  Termina esa parte.
+  TEXTO:                   |  Texto visible; cambia lo que está entre comillas.
+  COLOR:                   |  Dice en qué bloque de estilos.ts se cambia el color.
+  IMAGEN:                  |  Imagen: URL o require.
+  ICONO:                   |  Icono: nombre de la lista ICONOS.
+  ACCION:                  |  Qué pasa al tocar o escribir.
+  QUITAR:                  |  Cómo borrar ese bloque.
+
+==============================================================================
+7. DATOS (SRC/DATOS/EJEMPLO.TS)
+==============================================================================
+
+--- AGREGAR UN PRODUCTO ---
+
+Productos: líneas 15 a 29. Copia este objeto (es el de las líneas 23 a 28):
+
+  >>> CODIGO >>>
+      {
+        id: '2',
+        titulo: 'Cámara',
+        descripcion: 'Cámara compacta 24MP',
+        imagen: 'https://picsum.photos/id/250/400/300',
+      },
+  <<< FIN CODIGO <<<
+
+Pégalo debajo del último producto, antes del "];" final, y cámbialo:
+
+  >>> CODIGO >>>
+      {
+        id: '3',
+        titulo: 'Reloj',
+        descripcion: '$149',
+        imagen: 'https://picsum.photos/id/175/400/300',
+        etiqueta: 'Oferta',
+      },
+  <<< FIN CODIGO <<<
+
+  - id: un número que no se repita, entre comillas ('3', '4'...).
+  - titulo: el nombre del producto.
+  - descripcion: el texto gris. No hay campo de precio: si la captura muestra precio, ponlo aquí (ej. '$149').
+  - imagen: URL o require (ver "Cambiar la imagen").
+  - etiqueta: opcional. Si no la quieres, borra esa línea.
+
+--- AGREGAR UN USUARIO ---
+
+Usuarios: líneas 9 a 12. Cada usuario es una línea. Copia la línea 10:
+
+  >>> CODIGO >>>
+      { id: '1', nombre: 'Ana Pérez', descripcion: 'Diseñadora', imagen: 'https://i.pravatar.cc/150?img=47' },
+  <<< FIN CODIGO <<<
+
+Pégala debajo del último usuario, antes del "];", y cámbiala:
+
+  >>> CODIGO >>>
+      { id: '3', nombre: 'Lucía Gómez', descripcion: 'Product Manager', imagen: 'https://i.pravatar.cc/150?img=32' },
+  <<< FIN CODIGO <<<
+
+Sin foto (salen las iniciales "LG"): borra la parte de imagen:
+
+  >>> CODIGO >>>
+      { id: '3', nombre: 'Lucía Gómez', descripcion: 'Product Manager' },
+  <<< FIN CODIGO <<<
+
+--- QUITAR UNO ---
+
+  - Producto: borra su objeto completo, desde "{" hasta "},".
+  - Usuario: borra su línea completa.
+  - No borres el "];" del final.
+
+--- CAMBIAR LA IMAGEN ---
+
+De internet: pon la URL entre comillas.
+
+  >>> CODIGO >>>
+        imagen: 'https://picsum.photos/id/1/400/300',
+  <<< FIN CODIGO <<<
+
+Local: copia el archivo a C:\Users\Fabricio\Videos\Exa\assets\images\ y usa require (sin comillas alrededor del require):
+
+  >>> CODIGO >>>
+        imagen: require('@/assets/images/mi-foto.png'),
+  <<< FIN CODIGO <<<
+
+Imágenes que ya existen en assets/images: icon.png, react-logo.png, expo-logo.png, splash-icon.png, entre otras.
+
+==============================================================================
+8. ESTILOS (SRC/ESTILOS/ESTILOS.TS)
+==============================================================================
+
+Cada bloque controla un solo elemento. Busca el nombre con Ctrl+F y cambia el valor hex (entre comillas).
+
+  Bloque                        |  Nombre en el código  |  Líneas     |  Qué controla en pantalla
+  ------------------------------+-----------------------+-------------+--------------------------------------------------------------------------------
+  FONDO GENERAL DE LA PANTALLA  |  pantalla             |  26 a 29    |  Color de fondo de toda la pantalla y margen alrededor del contenido.
+  ESPACIOS                      |  espacios             |  33 a 39    |  Tamaños de <Espacio /> y separaciones internas.
+  TÍTULOS Y TEXTOS              |  textos               |  42 a 54    |  "Hola" (título), "Productos"/"Usuarios" (subtítulo), textos normales y chicos.
+  ICONOS                        |  iconos               |  57 a 61    |  Tamaño y color por defecto de los iconos.
+  IMÁGENES                      |  imagenes             |  64 a 67    |  Alto por defecto y gris mientras carga.
+  ENCABEZADO                    |  encabezado           |  70 a 78    |  Barra de arriba: fondo, título, iconos y línea.
+  BUSCADOR                      |  buscador             |  81 a 91    |  Caja de búsqueda: fondo, borde, lupa, texto.
+  CAMPO DE TEXTO                |  campoTexto           |  95 a 108   |  Campos de formulario (CampoTexto).
+  BOTÓN PRINCIPAL               |  botonPrincipal       |  111 a 118  |  Botón "Principal".
+  BOTÓN SECUNDARIO              |  botonSecundario      |  121 a 128  |  Botón "Secundario".
+  BOTÓN CON BORDE               |  botonBorde           |  131 a 138  |  Botón "Con borde".
+  TARJETA DE PRODUCTO           |  tarjetaProducto      |  141 a 158  |  Tarjetas: fondo, borde, sombra, textos, etiqueta "Nuevo", alto de imagen.
+  ITEM DE USUARIO               |  itemUsuario          |  161 a 170  |  Filas de usuario: fondo, nombre, descripción, flecha.
+  FOTO DE PERFIL                |  fotoPerfil           |  173 a 177  |  Tamaño del círculo y colores de las iniciales.
+  ETIQUETA                      |  etiqueta             |  180 a 185  |  Etiqueta "PRO".
+  MENÚ INFERIOR                 |  menuInferior         |  188 a 196  |  Barra de abajo: fondo, línea, icono activo e inactivo.
+
+Ojo: en BOTÓN SECUNDARIO los valores actuales son verdes (#5cbe3fff y #4ee611ff), pero el comentario todavía dice "naranja".
+
+--- COLORES COMUNES EN HEX ---
+
+  Color                       |  Hex
+  ----------------------------+---------
+  Rojo                        |  #E53935
+  Azul                        |  #1E88E5
+  Celeste                     |  #29B6F6
+  Verde                       |  #43A047
+  Amarillo                    |  #F4B400
+  Naranja                     |  #FB8C00
+  Morado                      |  #8E24AA
+  Morado azulado (el actual)  |  #4F46E5
+  Rosado                      |  #E91E63
+  Negro                       |  #000000
+  Negro suave                 |  #222222
+  Blanco                      |  #FFFFFF
+  Gris oscuro                 |  #1F2937
+  Gris                        |  #9E9E9E
+  Gris claro                  |  #E5E7EB
+
+Los hex de 8 dígitos (#RRGGBBAA) llevan transparencia al final: 'ff' = sólido, '80' = mitad transparente. Ej. '#5cbe3fff'. Para que no haya fondo usa 'transparent'.
+
+Truco: con un color picker (Paint, PowerToys o una web) toma el color directo de la captura y copia el hex.
+
+==============================================================================
+9. CREAR UN COMPONENTE NUEVO
+==============================================================================
+
+Ejemplo completo: un átomo Precio (texto grande verde).
+
+--- PASO 1. COPIAR UN ARCHIVO PARECIDO ---
+
+Copia src/componentes/atomos/Etiqueta.tsx y llama a la copia Precio.tsx (misma carpeta).
+
+--- PASO 2. RENOMBRAR Y ESCRIBIR EL COMPONENTE ---
+
+Reemplaza todo el contenido de Precio.tsx por esto:
+
+  >>> CODIGO >>>
+    /**
+     * QUÉ ES: Precio grande en color.
+     * Colores en estilos.ts -> PRECIO.
+     *
+     * PROPS:
+     *   valor -> el precio a mostrar (ej. "$199")
+     *
+     * EJEMPLO DE USO:
+     *   <Precio valor="$199" />
+     */
+    import { precio } from '@/estilos/estilos';
+    import { Texto } from './Texto';
+    
+    type PrecioProps = {
+      valor: string;
+    };
+    
+    export function Precio({ valor }: PrecioProps) {
+      return (
+        <Texto color={precio.color} tamano={precio.tamano} negrita>
+          {valor}
+        </Texto>
+      );
+    }
+  <<< FIN CODIGO <<<
+
+--- PASO 3. AGREGAR SU BLOQUE DE ESTILOS ---
+
+Al final de src/estilos/estilos.ts pega esto, y agrega "PRECIO" al índice de arriba:
+
+  >>> CODIGO >>>
+    // ==================== PRECIO ====================
+    export const precio = {
+      color: '#16A34A', // verde
+      tamano: 20,
+    };
+  <<< FIN CODIGO <<<
+
+--- PASO 4. EXPORTARLO EN EL INDEX.TS DE SU CARPETA ---
+
+En src/componentes/atomos/index.ts agrega:
+
+  >>> CODIGO >>>
+    export * from './Precio';
+  <<< FIN CODIGO <<<
+
+--- PASO 5. IMPORTARLO EN INDEX.TSX ---
+
+Agrégalo al import de átomos (línea 10):
+
+  >>> CODIGO >>>
+    import { Boton, Espacio, Etiqueta, FotoPerfil, Precio, Texto } from '@/componentes/atomos';
+  <<< FIN CODIGO <<<
+
+--- PASO 6. USARLO ---
+
+  >>> CODIGO >>>
+    <Precio valor="$199" />
+  <<< FIN CODIGO <<<
+
+Para una molécula u organismo es igual, pero en su carpeta (moleculas/ u organismos/), importando átomos desde '@/componentes/atomos' y exportándolo en el index.ts de esa carpeta.
+
+==============================================================================
+10. CÓMO REPLICAR UNA CAPTURA EN EL EXAMEN
+==============================================================================
+
+  - Colores primero: abre estilos.ts y cambia FONDO GENERAL, ENCABEZADO, BOTÓN PRINCIPAL, MENÚ INFERIOR y TÍTULOS Y TEXTOS según la captura. Copia los hex con un color picker.
+  - Divide la captura en bloques de arriba a abajo: encabezado, perfil, buscador, tarjetas, lista, botones, menú.
+  - Por cada bloque mira si ya existe en index.tsx (sección 6). Si existe, cambia sus textos (TEXTO:) y sus iconos (ICONO:).
+  - Si no existe pero hay un componente parecido, duplica un bloque o usa la ficha del componente (secciones 2 a 4).
+  - Borra los bloques que la captura no tiene (desde BLOQUE hasta FIN BLOQUE).
+  - Cambia los datos en src/datos/ejemplo.ts: nombres, descripciones, precios, imágenes y cantidad de elementos.
+  - Crea solo lo que falte (sección 9).
+  - Prueba en el celular después de cada cambio grande (presiona r en la terminal si no se recarga).
+  - Al final ajusta tamaños y bordes en estilos.ts (tamanoTitulo, bordeRedondeado, alto...).
+
+==============================================================================
+11. PROBLEMAS COMUNES
+==============================================================================
+
+--- NO SE VE EL CAMBIO EN EL CELULAR ---
+
+  - Guarda el archivo (Ctrl+S).
+  - Presiona r en la terminal donde corre Expo, o agita el celular y toca Reload.
+  - Si corres Expo desde WSL sobre /mnt/c, no se recarga solo: siempre presiona r.
+  - Si sigue igual, detén el servidor (Ctrl+C) y vuelve a levantarlo con --clear.
+
+--- PANTALLA ROJA DE ERROR ---
+
+  - Lee la primera línea del error: dice el archivo y la línea.
+  - Import mal escrito: revisa la ruta ('@/componentes/atomos', no 'atomo') y que el componente esté dentro de las llaves del import.
+  - Etiqueta sin cerrar: cada <Algo> necesita </Algo>, o terminar en />.
+  - Texto fuera de <Texto>: error "Text strings must be rendered within a <Text> component". Todo texto visible va dentro de <Texto>...</Texto>.
+  - Comentario en la misma línea que un elemento: {/* ... */} después de un elemento puede dejar un espacio suelto; pon el comentario en la línea de arriba.
+  - Icono que no existe: el nombre tiene que estar en la lista ICONOS de Icono.tsx.
+  - Coma o llave de más/menos en ejemplo.ts o estilos.ts: cada objeto termina en "},".
+
+Para encontrar errores sin abrir el celular:
+
+  >>> CODIGO >>>
+    npx tsc --noEmit
+  <<< FIN CODIGO <<<
+
+--- LEVANTAR EL SERVIDOR ---
+
+En PowerShell, dentro de C:\Users\Fabricio\Videos\Exa:
+
+  >>> CODIGO >>>
+    npx expo start --tunnel --clear
+  <<< FIN CODIGO <<<
+
+Si pregunta por instalar @expo/ngrok, responde Y (lo necesita el modo túnel). Si el celular está en la misma red wifi, también sirve sin túnel:
+
+  >>> CODIGO >>>
+    npx expo start --clear
+  <<< FIN CODIGO <<<
